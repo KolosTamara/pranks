@@ -4,8 +4,8 @@ import { AdaptivityProvider, ConfigProvider, AppRoot } from '@vkontakte/vkui';
 import { RouterProvider } from '@vkontakte/vk-mini-apps-router';
 import '@vkontakte/vkui/dist/vkui.css';
 
-import { transformVKBridgeAdaptivity } from './utils';
-import { router } from './routes';
+import { transformVKBridgeAdaptivity } from '../utils';
+import { router } from './routing/routes';
 import { App } from './App';
 
 export const AppConfig = () => {

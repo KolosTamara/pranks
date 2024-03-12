@@ -34,7 +34,7 @@ export const Home: FC<HomeProps> = ({ id, fetchedUser }) => {
 
       <Group header={<Header mode="secondary">Navigation Example</Header>}>
         <Div>
-          <Button stretched size="l" mode="secondary" onClick={() => routeNavigator.push('persik')}>
+          <Button stretched size="l" mode="secondary" onClick={() => routeNavigator.push('agify')}>
             Покажите Персика, пожалуйста!
           </Button>
         </Div>

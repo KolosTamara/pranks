@@ -3,11 +3,11 @@ import bridge, { UserInfo } from '@vkontakte/vk-bridge';
 import { View, SplitLayout, SplitCol, ScreenSpinner } from '@vkontakte/vkui';
 import { useActiveVkuiLocation } from '@vkontakte/vk-mini-apps-router';
 
-import { Persik, Home } from './panels';
-import { DEFAULT_VIEW_PANELS } from './routes';
+import { Persik, Home } from '../panels';
+import { DEFAULT_VIEW_PANELS } from './routing/routes';
 
 export const App = () => {
-  const { panel: activePanel = DEFAULT_VIEW_PANELS.HOME } = useActiveVkuiLocation();
+  const { panel: activePanel = DEFAULT_VIEW_PANELS.CATS } = useActiveVkuiLocation();
   const [fetchedUser, setUser] = useState<UserInfo | undefined>();
   const [popout, setPopout] = useState<ReactNode | null>(<ScreenSpinner size="large" />);
 
@@ -24,8 +24,8 @@ export const App = () => {
     <SplitLayout popout={popout}>
       <SplitCol>
         <View activePanel={activePanel}>
-          <Home id="home" fetchedUser={fetchedUser} />
-          <Persik id="persik" />
+          <Home id="cats" fetchedUser={fetchedUser} />
+          <Persik id="agify" />
         </View>
       </SplitCol>
     </SplitLayout>
