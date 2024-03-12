@@ -1,4 +1,4 @@
-export { Persik } from './Persik';
-export { Home } from './Home';
+export { Home } from './CatFacts';
+export { Persik } from './Agify';
 
-export type { HomeProps } from './Home';
+export type { HomeProps } from './CatFacts';
