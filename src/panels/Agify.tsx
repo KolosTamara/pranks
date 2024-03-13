@@ -1,19 +1,19 @@
 import { FC } from 'react';
-import { NavIdProps, Panel, PanelHeader, PanelHeaderBack, Placeholder } from '@vkontakte/vkui';
+import { NavIdProps, Panel, PanelHeader, PanelHeaderBack } from '@vkontakte/vkui';
 import { useRouteNavigator } from '@vkontakte/vk-mini-apps-router';
-import PersikImage from '../assets/persik.png';
+import { AgifyForm, useAgifyQuery } from '../features/agify';
 
-export const Persik: FC<NavIdProps> = ({ id }) => {
+export const Agify: FC<NavIdProps> = ({ id }) => {
   const routeNavigator = useRouteNavigator();
+  const { data } = useAgifyQuery()
+  console.log(data)
 
   return (
     <Panel id={id}>
       <PanelHeader before={<PanelHeaderBack onClick={() => routeNavigator.back()} />}>
-        Persik
+        Agify
       </PanelHeader>
-      <Placeholder>
-        <img width={230} src={PersikImage} alt="Persik The Cat" />
-      </Placeholder>
+      <AgifyForm></AgifyForm>
     </Panel>
   );
 };
