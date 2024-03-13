@@ -1,11 +1,15 @@
 import { useForm } from "react-hook-form"
 import { useAgifyQuery } from "../state/agify.query"
+import { IAgify } from "../model/agify.model";
+import { useState } from "react";
 
 type FormData = {
   firstName: string
 }
 
 export function AgifyForm() {
+  const [name, setName] = useState("")
+  const { data } = useAgifyQuery(name)
   const {
     register,
     watch,
@@ -13,7 +17,7 @@ export function AgifyForm() {
     formState: { errors },
   } = useForm<FormData>()
   const watchFirstName = watch("firstName")
-  const onSubmit = handleSubmit((data) => console.log(data))
+  const onSubmit = handleSubmit((data) => setName(data.firstName))
 
   return (
     <form onSubmit={onSubmit}>
@@ -27,6 +31,9 @@ export function AgifyForm() {
       >
         Submit
       </button>
+      <div>
+        Your age {data?.age}
+      </div>
     </form>
   )
 }
