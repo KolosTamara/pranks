@@ -1,7 +1,7 @@
 import { useForm } from "react-hook-form"
 import { useAgifyQuery } from "../state/agify.query"
-import { IAgify } from "../model/agify.model";
-import { useState } from "react";
+import { ChangeEvent, useCallback, useState } from "react";
+import { debounce } from "../../../shared/debouncer";
 
 type FormData = {
   firstName: string
@@ -12,20 +12,20 @@ export function AgifyForm() {
   const { data } = useAgifyQuery(name)
   const {
     register,
-    watch,
     handleSubmit,
-    formState: { errors },
   } = useForm<FormData>()
-  const watchFirstName = watch("firstName")
   const onSubmit = handleSubmit((data) => setName(data.firstName))
+
+  const setNameDebounced = useCallback(debounce(setName, 3000), [setName])
+
+  function handleChange(event: ChangeEvent<HTMLInputElement>) {
+    setNameDebounced(event.target.value)
+  }
 
   return (
     <form onSubmit={onSubmit}>
       <label>First name </label>
-      <input {...register("firstName")} />
-      {watchFirstName && (
-        <div> HELLO </div>
-      )}
+      <input {...register("firstName", { onChange: handleChange })} />
       <button
         type="submit"
       >
