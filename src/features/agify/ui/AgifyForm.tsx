@@ -1,7 +1,14 @@
 import { useForm } from "react-hook-form"
 import { useAgifyQuery } from "../state/agify.query"
-import { ChangeEvent, useCallback, useState } from "react";
+import { ChangeEvent, useCallback, useMemo, useState } from "react";
 import { debounce } from "../../../shared/debouncer";
+import { Button, Div, FormItem, Input } from "@vkontakte/vkui";
+import * as yup from "yup";
+import { yupResolver } from "@hookform/resolvers/yup";
+
+const schema = yup.object().shape({
+  firstName: yup.string().matches(/^[A-Za-zА-Яа-я]+$/, 'Only letters').required('Required'),
+});
 
 type FormData = {
   firstName: string
@@ -9,31 +16,47 @@ type FormData = {
 
 export function AgifyForm() {
   const [name, setName] = useState("")
-  const { data } = useAgifyQuery(name)
+  const { data, isLoading } = useAgifyQuery(name)
+
   const {
     register,
     handleSubmit,
-  } = useForm<FormData>()
-  const onSubmit = handleSubmit((data) => setName(data.firstName))
+    formState: { errors }
+  } = useForm<FormData>({
+    resolver: yupResolver(schema),
+  })
+  const isError = !!errors.firstName
 
   const setNameDebounced = useCallback(debounce(setName, 3000), [setName])
 
-  function handleChange(event: ChangeEvent<HTMLInputElement>) {
-    setNameDebounced(event.target.value)
-  }
+  const handleChange = useCallback((event: ChangeEvent<HTMLInputElement>) => {
+    if (!isError) {
+      setNameDebounced(event.target.value)
+    }
+  }, [setNameDebounced, isError])
+
+  const { ref, ...firstNameRegister } = useMemo(() => register("firstName", {
+    onChange: handleChange,
+  }), [handleChange])
+
+  const onSubmit = handleSubmit((data) => setName(data.firstName))
 
   return (
     <form onSubmit={onSubmit}>
-      <label>First name </label>
-      <input {...register("firstName", { onChange: handleChange })} />
-      <button
-        type="submit"
-      >
-        Submit
-      </button>
-      <div>
-        Your age {data?.age}
-      </div>
+      <FormItem top="First name" >
+        <Input status={isError ? 'error' : 'default'} getRootRef={ref} {...firstNameRegister} />
+      </FormItem>
+      <Div>
+        Your age: {isLoading ? 'Loading...' : data?.age}
+      </Div>
+      <Div>
+        <Button
+          disabled={isError}
+          type="submit"
+        >
+          Submit
+        </Button>
+      </Div>
     </form>
   )
 }
