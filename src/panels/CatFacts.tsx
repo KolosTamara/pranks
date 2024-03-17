@@ -1,26 +1,32 @@
-import { FC, useState } from 'react';
+import { FC, useEffect, useRef, useState } from 'react';
 import {
   Panel,
   PanelHeader,
   Header,
   Button,
   Group,
-  Cell,
   Div,
-  Avatar,
   NavIdProps,
+  Textarea,
+  FormItem,
 } from '@vkontakte/vkui';
-import { UserInfo } from '@vkontakte/vk-bridge';
 import { useRouteNavigator } from '@vkontakte/vk-mini-apps-router';
 import { useCatFactsMutation } from '../features/cats';
 
-export interface HomeProps extends NavIdProps {
-  fetchedUser?: UserInfo;
-}
-
-export const Home: FC<HomeProps> = ({ id, fetchedUser }) => {
+export const CatFacts: FC<NavIdProps> = ({ id }) => {
   const routeNavigator = useRouteNavigator();
   const [fact, setFact] = useState<string>('');
+
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
+
+  useEffect(() => {
+    if (textareaRef.current && fact) {
+      const textarea = textareaRef.current;
+      textarea.focus();
+      const firstSpaceIndex = textarea.value.indexOf(' ');
+      textarea.setSelectionRange(firstSpaceIndex, firstSpaceIndex);
+    }
+  }, [textareaRef.current, fact]);
 
   const { mutateAsync: getCatFact } = useCatFactsMutation();
 
@@ -36,9 +42,11 @@ export const Home: FC<HomeProps> = ({ id, fetchedUser }) => {
         <Button onClick={handleShowCatFact}>
           Show me cat facts
         </Button>
-        <Div>Your fact about cats: {fact}</Div>
+        <FormItem top="Your fact about cats:">
+          <Textarea getRef={textareaRef} value={fact} />
+        </FormItem>
       </Div>
-      <Group header={<Header mode="secondary">Navigation Example</Header>}>
+      <Group>
         <Div>
           <Button stretched size="l" mode="secondary" onClick={() => routeNavigator.push('agify')}>
             Go to Agify page

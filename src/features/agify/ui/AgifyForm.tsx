@@ -12,11 +12,11 @@ const schema = yup.object().shape({
 
 type FormData = {
   firstName: string
-}
+};
 
 export function AgifyForm() {
-  const [name, setName] = useState("")
-  const { data, isLoading } = useAgifyQuery(name)
+  const [name, setName] = useState<string>("");
+  const { data, isLoading } = useAgifyQuery(name);
 
   const {
     register,
@@ -24,22 +24,23 @@ export function AgifyForm() {
     formState: { errors }
   } = useForm<FormData>({
     resolver: yupResolver(schema),
-  })
-  const isError = !!errors.firstName
+  });
 
-  const setNameDebounced = useCallback(debounce(setName, 3000), [setName])
+  const isError = !!errors.firstName;
+
+  const setNameDebounced = useCallback(debounce(setName, 3000), [setName]);
 
   const handleChange = useCallback((event: ChangeEvent<HTMLInputElement>) => {
     if (!isError) {
-      setNameDebounced(event.target.value)
+      setNameDebounced(event.target.value);
     }
-  }, [setNameDebounced, isError])
+  }, [setNameDebounced, isError]);
 
   const { ref, ...firstNameRegister } = useMemo(() => register("firstName", {
     onChange: handleChange,
-  }), [handleChange])
+  }), [handleChange]);
 
-  const onSubmit = handleSubmit((data) => setName(data.firstName))
+  const onSubmit = handleSubmit((data) => setName(data.firstName));
 
   return (
     <form onSubmit={onSubmit}>
