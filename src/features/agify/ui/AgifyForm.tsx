@@ -11,7 +11,7 @@ const schema = yup.object().shape({
 });
 
 type FormData = {
-  firstName: string
+  firstName: string,
 };
 
 export function AgifyForm() {
@@ -59,5 +59,5 @@ export function AgifyForm() {
         </Button>
       </Div>
     </form>
-  )
+  );
 }

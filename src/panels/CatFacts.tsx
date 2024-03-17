@@ -2,7 +2,6 @@ import { FC, useEffect, useRef, useState } from 'react';
 import {
   Panel,
   PanelHeader,
-  Header,
   Button,
   Group,
   Div,

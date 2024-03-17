@@ -7,5 +7,5 @@ export function useCatFactsMutation() {
       const { data } = await CatsApi.getCatFact();
       return data;
     }
-  })
+  });
 }
