@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { FC, useState } from 'react';
 import {
   Panel,
   PanelHeader,
@@ -12,30 +12,36 @@ import {
 } from '@vkontakte/vkui';
 import { UserInfo } from '@vkontakte/vk-bridge';
 import { useRouteNavigator } from '@vkontakte/vk-mini-apps-router';
+import { useCatFactsMutation } from '../features/cats';
 
 export interface HomeProps extends NavIdProps {
   fetchedUser?: UserInfo;
 }
 
 export const Home: FC<HomeProps> = ({ id, fetchedUser }) => {
-  const { photo_200, city, first_name, last_name } = { ...fetchedUser };
   const routeNavigator = useRouteNavigator();
+  const [fact, setFact] = useState<string>('');
+
+  const { mutateAsync: getCatFact } = useCatFactsMutation();
+
+  async function handleShowCatFact() {
+    const catFact = await getCatFact();
+    setFact(catFact.fact);
+  }
 
   return (
     <Panel id={id}>
-      <PanelHeader>Главная</PanelHeader>
-      {fetchedUser && (
-        <Group header={<Header mode="secondary">User Data Fetched with VK Bridge</Header>}>
-          <Cell before={photo_200 && <Avatar src={photo_200} />} subtitle={city?.title}>
-            {`${first_name} ${last_name}`}
-          </Cell>
-        </Group>
-      )}
-
+      <PanelHeader>Cat Facts</PanelHeader>
+      <Div>
+        <Button onClick={handleShowCatFact}>
+          Show me cat facts
+        </Button>
+        <Div>Your fact about cats: {fact}</Div>
+      </Div>
       <Group header={<Header mode="secondary">Navigation Example</Header>}>
         <Div>
           <Button stretched size="l" mode="secondary" onClick={() => routeNavigator.push('agify')}>
-            Покажите Персика, пожалуйста!
+            Go to Agify page
           </Button>
         </Div>
       </Group>

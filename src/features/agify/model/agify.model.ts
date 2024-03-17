@@ -1,5 +1,5 @@
 export interface IAgify {
-  "count": number,
-  "name": string,
-  "age": number
+  count: number,
+  name: string,
+  age: number
 }
