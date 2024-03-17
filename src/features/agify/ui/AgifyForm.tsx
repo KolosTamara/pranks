@@ -7,7 +7,7 @@ import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 
 const schema = yup.object().shape({
-  firstName: yup.string().matches(/^[A-Za-zА-Яа-я]+$/, 'Only letters').required('Required'),
+  firstName: yup.string().matches(/^[A-Za-z]+$/, 'Only letters').required('Required'),
 });
 
 type FormData = {
